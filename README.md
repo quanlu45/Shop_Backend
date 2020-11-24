@@ -1,9 +1,38 @@
-# Getting Started
+#### 传说中的电商后台系统
 
-### Reference Documentation
-For further reference, please consider the following sections:
+前台：
 
-* [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
-* [Spring Boot Maven Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/2.3.6.RELEASE/maven-plugin/reference/html/)
-* [Create an OCI image](https://docs.spring.io/spring-boot/docs/2.3.6.RELEASE/maven-plugin/reference/html/#build-image)
+1.	登录/注册
+2.	首页
+-推荐活动
+-推荐商品
+-推荐品牌
+3.	商品展示
+-商品分类
+-商品信息
+-购买
+4.	活动（活动商品）
+-活动详情
+-活动商品
+5.	购物车
+-未支付订单
+-支付
+6.	个人中心
+-个人信息
+-已支付订单信息
 
+后台：
+
+1.	登录/注册
+2.	人员管理
+-消费者信息
+-管理员用户
+3.	商品管理
+-商品
+-商品栏目
+4.	活动管理
+-活动栏目
+-活动商品
+5.	订单管理
+-订单
+-支付
