@@ -36,3 +36,13 @@
 5.	订单管理
 -订单
 -支付
+
+
+模块说明:
+
+- eshop-bean 放po、vo、bo、dto
+- eshop-common 一些工具类啥的
+- eshop-dao 
+- eshop-service  
+- eshop-controller-web    与web端交互的controller层
+- eshop-controller-manager    与后台管理交互的controller层
