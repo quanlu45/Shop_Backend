@@ -56,10 +56,10 @@ public class UserInfoServiceImpl implements UserInfoService {
             userRepository.saveAndFlush(user);
             return ResponseDTO.success().withKeyValueData("userId",user.getUserId());
         }catch (DataIntegrityViolationException e){
-            log.info("register===> {} ,user ={}","用户名重复", JSON.toJSONString(user));
+            log.info("updateUserInfoById===> {} ,user ={}","用户名重复", JSON.toJSONString(user));
             return ResponseDTO.error(StatusEnum.PARAM_ERROR,"用户名重复！请修改后再试！");
         }catch (Exception e){
-            log.error("register===> {} ,user ={}",e.getMessage(), JSON.toJSONString(user));
+            log.error("updateUserInfoById===> {} ,user ={}",e.getMessage(), JSON.toJSONString(user));
             return ResponseDTO.error(StatusEnum.SERVER_ERROR,e.getCause().getMessage());
         }
     }
