@@ -9,7 +9,7 @@ create table tb_user(
 user_id int primary key auto_increment comment '用户自增逐渐',
 user_name varchar(25) not null unique comment '用户名',
 reg_time datetime not null default now() comment '注册时间',
-avatar_url varchar(50) not null default "http://localhost:8080/static/imgs/aval/default.png" comment '头像url',
+avatar_url varchar(50) not null default 'http://localhost:8080/static/imgs/aval/default.png' comment '头像url',
 pwd varchar(64) not null comment '加密后的密码',
 status tinyint not null default 0 comment '状态码，0正常，1异常，2 逻辑删除'
 )auto_increment =999;
@@ -21,6 +21,7 @@ insert into tb_user (user_name,pwd) values('test','123456');
 
 /*配送地址列表*/
 create table tb_address(
+address_id int primary key auto_increment comment '地址Id',
 user_id int not null comment '关联用户id',
 address varchar(80) not null comment '配送地址',
 tag varchar(10) comment '标签',
