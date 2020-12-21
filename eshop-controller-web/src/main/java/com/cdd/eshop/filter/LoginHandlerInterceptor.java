@@ -60,7 +60,7 @@ public class LoginHandlerInterceptor implements HandlerInterceptor {
             return false;
         }
 
-        Integer userId = JwtUtil.verifyAndGetId(tokenPrivateKey,accesstoken);
+        Integer userId = JwtUtil.verifyAndGetIntegerClaim(tokenPrivateKey,accesstoken,"userId");
         if (userId == null){
             setErrorResponse(response,StatusEnum.TOKEN_INVALID);
             return false;
@@ -86,4 +86,5 @@ public class LoginHandlerInterceptor implements HandlerInterceptor {
 /*            response.sendError(500);*/
         }
     }
+
 }

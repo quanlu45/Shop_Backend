@@ -6,6 +6,12 @@ import lombok.Data;
 
 import java.util.Date;
 
+/**
+ * 用户信息视图对象
+ *
+ * @author quan
+ * @date 2020/12/21
+ */
 @Data
 @ApiModel
 public class UserInfoVo {

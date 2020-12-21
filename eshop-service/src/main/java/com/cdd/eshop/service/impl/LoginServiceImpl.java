@@ -49,7 +49,7 @@ public class LoginServiceImpl implements LoginService {
         user = userOptional.get();
 
         //设置token的有效期为三天
-        String token = JwtUtil.create(tokenPrivateKey,Duration.ofDays(3),user.getUserId());
+        String token = JwtUtil.createWithIntegerClaim(tokenPrivateKey,Duration.ofDays(3),"userId",user.getUserId());
 
         UserInfoVo vo = new UserInfoVo();
         vo.setUserName(user.getUserName());

@@ -11,18 +11,31 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
+/**
+ * jwt工具类
+ *
+ * @author quan
+ * @date 2020/12/21
+ */
 public final class JwtUtil {
 
 
-    private static Algorithm  algorithm =  Algorithm.HMAC256("lnp^A0tT");
+    /**
+     * 算法
+     */
+    private static final Algorithm  algorithm =  Algorithm.HMAC256("lnp^A0tT");
 
-    private static String  issuer ="cddAuth";
+    /**
+     * 发行人
+     */
+    private static final String  issuer ="cddAuth";
 
 
-    /***
-     * 生成token
-     * @param expDate  过期时间
-     * @return
+    /**
+     * 创建token
+     *
+     * @param expDate 过期日期
+     * @return {@link String}
      */
     public static String create(Date expDate) {
         String token ="";
@@ -38,6 +51,13 @@ public final class JwtUtil {
     }
 
 
+    /**
+     * 创建
+     *
+     * @param privateKey 私钥
+     * @param timeout    超时
+     * @return {@link String}
+     */
     public static String create(String privateKey,Duration timeout) {
         Algorithm ag =  Algorithm.HMAC256(privateKey);
         LocalDateTime localDateTime =  LocalDateTime.now().plusMinutes(timeout.toMinutes());
@@ -54,7 +74,16 @@ public final class JwtUtil {
     }
 
 
-    public static String create(String privateKey, Duration timeout, Integer userId) {
+    /**
+     * 创建token 带整数声明
+     *
+     * @param privateKey 私钥
+     * @param timeout    超时
+     * @param claimKey   声明key
+     * @param claimVal   声明值
+     * @return {@link String}
+     */
+    public static String createWithIntegerClaim(String privateKey, Duration timeout,String claimKey, Integer claimVal) {
         Algorithm ag =  Algorithm.HMAC256(privateKey);
         LocalDateTime localDateTime =  LocalDateTime.now().plusMinutes(timeout.toMinutes());
         Date date = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
@@ -62,7 +91,7 @@ public final class JwtUtil {
         try {
             token = JWT.create()
                     .withExpiresAt(date)
-                    .withClaim("userId",userId)
+                    .withClaim(claimKey,claimVal)
                     .sign(ag);
         } catch (Exception e) {
             e.printStackTrace();
@@ -70,10 +99,12 @@ public final class JwtUtil {
         return token;
     }
 
-    /***
+    /**
+     * 验证*
      * 校验token是否有效
-     * @param token
-     * @return
+     *
+     * @param token 令牌
+     * @return boolean
      */
     public static boolean verify(String token) {
         try {
@@ -88,6 +119,13 @@ public final class JwtUtil {
     }
 
 
+    /**
+     * 验证
+     *
+     * @param privateKey 私钥
+     * @param token      令牌
+     * @return boolean
+     */
     public static boolean verify(String privateKey,String token) {
         try {
            Algorithm  privatealgorithm =  Algorithm.HMAC256(privateKey);
@@ -102,17 +140,25 @@ public final class JwtUtil {
     }
 
 
-    public static Integer verifyAndGetId(String privateKey, String token) {
+    /**
+     * 验证和得到Id
+     *
+     * @param privateKey 私钥
+     * @param token      令牌
+     * @return {@link Integer}
+     */
+    public static Integer verifyAndGetIntegerClaim(String privateKey, String token,String claimKey) {
         try {
             Algorithm  privatealgorithm =  Algorithm.HMAC256(privateKey);
             JWTVerifier verifier = JWT.require(privatealgorithm)
                     .build();
-            verifier.verify(token);
             DecodedJWT jwt = verifier.verify(token);
-            return  jwt.getClaim("userId").asInt();
+            return  jwt.getClaim(claimKey).asInt();
         } catch (JWTVerificationException e) {
             return null;
         }
     }
+
+
 
 }
