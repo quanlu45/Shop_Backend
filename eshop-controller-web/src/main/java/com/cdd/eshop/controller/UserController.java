@@ -111,7 +111,7 @@ public class UserController extends BaseController {
     }
 
 
-    @PostMapping("info/address/list")
+    @GetMapping("info/address/list")
     @ApiOperation("获取地址列表")
     ResponseDTO listAddress(HttpServletRequest request) {
         return userInfoService.listAddress(this.getUserId(request));

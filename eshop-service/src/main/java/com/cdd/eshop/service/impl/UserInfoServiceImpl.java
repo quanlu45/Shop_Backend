@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSON;
 import com.cdd.eshop.bean.dto.ResponseDTO;
 import com.cdd.eshop.bean.po.Address;
 import com.cdd.eshop.bean.po.User;
-import com.cdd.eshop.bean.vo.UserInfoVo;
+import com.cdd.eshop.bean.vo.UserInfoVO;
 import com.cdd.eshop.common.StatusEnum;
 import com.cdd.eshop.mapper.AddressRepository;
 import com.cdd.eshop.mapper.UserRepository;
@@ -42,7 +42,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     public ResponseDTO getUserInfoById(Integer userId) {
 
         User user = userRepository.getOne(userId);
-        UserInfoVo vo = new UserInfoVo();
+        UserInfoVO vo = new UserInfoVO();
         BeanUtils.copyProperties(user,vo);
         return ResponseDTO.success().data(vo);
     }

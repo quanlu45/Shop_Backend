@@ -14,7 +14,7 @@ import java.util.Date;
  */
 @Data
 @ApiModel
-public class UserInfoVo {
+public class UserInfoVO {
 
     @ApiModelProperty("用户Id")
     Integer userId;

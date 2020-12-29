@@ -14,7 +14,18 @@ import javax.servlet.http.HttpServletRequest;
 public class BaseController {
 
     @Value("${token.private-key}")
-    String tokenPrivateKey;
+    private String tokenPrivateKey;
+
+
+    /**
+     * 默认的页面大小
+     */
+    protected Integer defaultPageSize = 10;
+
+    /**
+     * 默认的页面数量
+     */
+    protected Integer defaultPageNumber = 0;
 
     /**
      * 获得用户的Id

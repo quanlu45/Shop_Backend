@@ -3,7 +3,7 @@ package com.cdd.eshop.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.cdd.eshop.bean.dto.ResponseDTO;
 import com.cdd.eshop.bean.po.User;
-import com.cdd.eshop.bean.vo.UserInfoVo;
+import com.cdd.eshop.bean.vo.UserInfoVO;
 import com.cdd.eshop.common.StatusEnum;
 import com.cdd.eshop.mapper.UserRepository;
 import com.cdd.eshop.service.LoginService;
@@ -51,7 +51,7 @@ public class LoginServiceImpl implements LoginService {
         //设置token的有效期为三天
         String token = JwtUtil.createWithIntegerClaim(tokenPrivateKey,Duration.ofDays(3),"userId",user.getUserId());
 
-        UserInfoVo vo = new UserInfoVo();
+        UserInfoVO vo = new UserInfoVO();
         vo.setUserName(user.getUserName());
         vo.setRegTime(user.getRegTime());
         vo.setToken(token);

@@ -33,9 +33,10 @@ status tinyint not null default 0  comment '地址状态，0 普通，1 默认地址，2 逻辑
 /*商品类型表*/
 create table tb_goods_type(
 type_id int primary key auto_increment comment '商品类型id',
+type_code varchar (11) not null comment '商品类型code',
 type_name varchar(25) not null comment '商品类型名称',
 type_desc varchar(255) comment '商品类型描述',
-parent_type_id int not null default 0 comment '父类类型',
+parent_type_code int not null default 0 comment '父类类型code',
 is_delete tinyint default 0 comment '逻辑删除标志位，0 正常，1 逻辑删除'
 );
 
