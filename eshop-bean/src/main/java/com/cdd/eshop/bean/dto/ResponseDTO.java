@@ -93,6 +93,18 @@ public class ResponseDTO implements Serializable {
         return this;
     }
 
+
+    /**
+     * 消息
+     *
+     * @param msg  消息
+     * @param args 变长参数
+     * @return {@link ResponseDTO}
+     */
+    public ResponseDTO msg(String msg,Object... args){
+        return  this.msg(String.format(msg,args));
+    }
+
     /**
      * 错误
      *
