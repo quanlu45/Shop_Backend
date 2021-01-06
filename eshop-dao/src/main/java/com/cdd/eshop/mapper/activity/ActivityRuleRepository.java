@@ -4,6 +4,7 @@ import com.cdd.eshop.bean.po.activity.ActivityRule;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,4 +23,10 @@ public interface ActivityRuleRepository extends JpaRepository<ActivityRule,Integ
     @Transactional
     @Query("delete from ActivityRule r where r.ruleId in (?1)")
     void deleteBatchByIds(List<Integer> ids);
+
+    @Query("select ar from ActivityRule  ar " +
+            "where ar.activityId in (:activityIds) " +
+            "order by ar.ruleType desc ")
+    List<ActivityRule> findAllByActivityIdInOrderByRuleType(@Param("activityIds") List<Integer> activityIds);
+
 }
