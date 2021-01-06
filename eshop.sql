@@ -110,7 +110,7 @@ user_id int not null comment '¹ØÁªÓÃ»§id',
 create_time datetime not null default now() comment '¶©µ¥´´½¨Ê±¼ä',
 finish_time datetime not null default now() comment '¶©µ¥Íê³ÉÊ±¼ä, ÒÑÊÕ»õ»òÒÑÍË¿î¡¢ÒÑ¹Ø±ÕÊ±¸üĞÂ½áÊøÊ±¼ä',
 activity_ids varchar(50) comment '¹ØÁª»î¶¯id,¶ººÅ·Ö¸ô',
-freight float not null default 0 comment 'ÔË·Ñ',
+total_freight decimal(12,5) not null default 0 comment 'ÔË·Ñ',
 total_discount decimal(12,5) not null default 0 comment 'ÕÛ¿Û', 
 total_price decimal(12,5) not null default 0 comment '×Ü¼Û(Ó¦¸¶)',
 total_pay decimal(12,5) not null comment 'Êµ¸¶',
@@ -123,6 +123,8 @@ status tinyint not null default 0 comment '¶©µ¥×´Ì¬ 0 ´ı¸¶¿î£¬1 ´ı·¢»õ £¬2 ´ıÊÕ»
 create table tb_order_item(
 order_number varchar(15) not null comment '¹ØÁª¶©µ¥±àºÅ',
 goods_id int not null comment '¹ØÁªÉÌÆ·',
+address_id int not null comment 'ÅäËÍµØÖ·',
+freight decimal(12,5) not null default 0 comment 'ÔË·Ñ',
 amount int not null default 0 comment 'ÉÌÆ·ÊıÁ¿',
 is_delete tinyint not null default 0 comment '0Õı³£,1Âß¼­É¾³ı'
 );
