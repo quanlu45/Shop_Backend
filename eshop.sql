@@ -71,49 +71,34 @@ activity_desc varchar(255) comment '活动描述',
 activity_poster_url varchar(50) comment '活动海报url',
 start_time datetime not null default now() comment '活动开始时间',
 end_time datetime not null default now() comment '活动结束时间',
-activity_type tinyint not null default 1 comment '活动类型 0001 打折 ，0010 满减 ，附送 0100 ,如几种同时存在，则按位或',
 status tinyint not null default 0 comment '活动状态 0 待开始 ，1 进行中，2 已结束，3 逻辑删除 '
 );
 
 
-/*商品活动关联表*/
-create table tb_activity_goods(
-activity_id int not null comment '活动id',
+/*活动规则表*/
+create table tb_activity_rule(
+rule_id int not null primary key comment '主键id',
+rule_type tinyint not null default 0 comment '0,打折，1满减，2附送',
+rule_limit float not null default 0 comment '规则限制,0 表示无限制',
+rule_val float not null comment '规则值。打折为打折因子，满减为满减值，附送，为附赠商品id',
+relation_type tinyint not null default 0 comment '商品关联类型，0 特定商品，存在关联表里,1 所有商品适用',
+activity_id int not null comment '活动id'
+);
+
+/*活动规则规则关联表*/
+create table tb_rule_goods(
+rule_goods_id int primary key auto_increment comment '主键id',
+rule_id int not null comment '规则id',
 goods_id int not null comment '活动关联商品id'
 );
 
 
-
-/*打折活动规则表*/
-create table tb_rule_dicount(
-activity_id int not null comment '活动id',
-discount_limit float not null default 0 comment '打折限制 0 代表无限制',
-discount float not null default 1 comment '折扣'
-);
-
-
-/*满减活动规则表*/
-create table tb_rule_full_reduction(
-activity_id int not null comment '活动id',
-reduction_limit float not null default 0 comment '满减限制',
-reduction float not null default 1 comment '折扣'
-);
-
-/*附送活动规则表*/
-create table tb_rule_attach(
-activity_id int not null comment '活动id',
-attach_limit float not null default 0 comment '赠送限制，0代表无限制',
-attach_id decimal(12,4) not null default 0 comment '赠送商品id'
-);
-
-
-
 /*购物车*/
 create table tb_shop_cart(
+cart_id int primary key auto_increment comment '主键',
 user_id int not null comment '关联用户id',
 goods_id int not null comment '关联商品',
-amount int not null default 0 comment '商品数量',
-is_delete tinyint not null default 0 comment '0正常,1逻辑删除'
+amount int not null default 0 comment '商品数量'
 ); 
 
 
