@@ -2,8 +2,7 @@ package com.cdd.eshop.bean.po;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * 商品img
@@ -19,6 +18,8 @@ public class GoodsImg {
     /**
      * imgId
      */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer imgId;
 
     /**

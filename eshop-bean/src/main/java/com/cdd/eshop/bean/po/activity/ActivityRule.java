@@ -52,7 +52,6 @@ public class ActivityRule{
      * 规则关系商品列表
      */
     @OneToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER,orphanRemoval=true)
-    @JoinColumn(referencedColumnName = "rule_Id")
     private List<RuleGoods> ruleRelationGoodsList;
 
 }

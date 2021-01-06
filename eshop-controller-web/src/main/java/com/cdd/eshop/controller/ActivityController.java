@@ -6,6 +6,7 @@ import com.cdd.eshop.service.ActivityService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,7 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @author quan
  * @date 2021/01/06
  */
-@RestController("/v1/activity")
+@RestController
+@RequestMapping("/v1/activity")
 public class ActivityController extends BaseController {
 
     @Autowired

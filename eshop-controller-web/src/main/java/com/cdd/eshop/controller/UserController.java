@@ -23,7 +23,8 @@ import javax.servlet.http.HttpServletRequest;
  * @author quan
  * @date 2020/12/21
  */
-@RestController("/v1/user")
+@RestController
+@RequestMapping("/v1/user")
 public class UserController extends BaseController {
 
     @Autowired

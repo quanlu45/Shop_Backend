@@ -18,6 +18,6 @@ import java.util.List;
 @Repository
 public interface ActivityRepository extends JpaRepository<Activity,Integer> {
 
-    @Query("select a from Activity a where a.status<>3 and (status is null or a.status =: status)")
+    @Query("select a from Activity a where a.status<>3 and (:status is null or a.status =: status)")
     List<Activity> listActivity(@Param("status") Short status);
 }

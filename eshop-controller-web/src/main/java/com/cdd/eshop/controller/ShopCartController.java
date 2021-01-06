@@ -11,7 +11,14 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
-@RestController("v1/cart")
+/**
+ * 商店购物车控制器
+ *
+ * @author quan
+ * @date 2021/01/06
+ */
+@RestController
+@RequestMapping("/v1/cart")
 public class ShopCartController extends BaseController {
 
     @Autowired
