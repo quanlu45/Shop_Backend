@@ -1,9 +1,11 @@
 package com.cdd.eshop.controller;
 
 
+import com.cdd.eshop.bean.bo.LoginBO;
 import com.cdd.eshop.bean.dto.ResponseDTO;
 import com.cdd.eshop.bean.po.Address;
 import com.cdd.eshop.bean.po.User;
+import com.cdd.eshop.bean.vo.UserInfoVO;
 import com.cdd.eshop.common.BaseController;
 import com.cdd.eshop.common.StatusEnum;
 import com.cdd.eshop.filter.LoginHandlerInterceptor;
@@ -36,12 +38,11 @@ public class UserController extends BaseController {
 
     @PostMapping("/login")
     @ApiOperation("用户登录接口，返回用户信息")
-    ResponseDTO login(@RequestParam(value = "userName")String userName,
-                      @RequestParam(value = "password")String password){
+    ResponseDTO login(@RequestBody LoginBO bo){
 
-        ResponseDTO dto = loginService.login(userName,password);
+        ResponseDTO dto = loginService.login(bo.getUserName(), bo.getPassword());
         if (dto.getCode().equals(StatusEnum.SUCCESS.getCode())){
-            LoginHandlerInterceptor.blackTokenList.remove(((User)dto.getData()).getUserId());
+            LoginHandlerInterceptor.blackTokenList.remove(((UserInfoVO)dto.getData()).getUserId());
         }
         return dto;
     }
