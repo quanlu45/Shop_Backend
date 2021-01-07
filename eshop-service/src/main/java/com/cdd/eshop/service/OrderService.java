@@ -20,4 +20,50 @@ public interface OrderService {
      */
     ResponseDTO placeOrder(Integer userId,OrderBO orderBO);
 
+
+    /**
+     * 列出订单
+     *
+     * @param userId 用户Id
+     * @param status 状态
+     * @return {@link ResponseDTO}
+     */
+    ResponseDTO listOrder(Integer userId,Short status);
+
+    /**
+     * 支付订单
+     *
+     * @param orderNumber 订单编号
+     * @return {@link ResponseDTO}
+     */
+    ResponseDTO payOrder(Integer userId,String orderNumber);
+
+
+    /**
+     * 关闭订单
+     *
+     * @param userId      用户Id
+     * @param orderNumber 订单编号
+     * @return {@link ResponseDTO}
+     */
+    ResponseDTO cancelOrder(Integer userId,String orderNumber);
+
+    /**
+     * 删除订单
+     *
+     * @param userId      用户Id
+     * @param orderNumber 订单编号
+     * @return {@link ResponseDTO}
+     */
+    ResponseDTO deleteOrder(Integer userId,String orderNumber);
+
+    /**
+     * 细节订单
+     *
+     * @param userId      用户Id
+     * @param orderNumber 订单编号
+     * @return {@link ResponseDTO}
+     */
+    ResponseDTO detailOrder(Integer userId,String orderNumber);
+
 }

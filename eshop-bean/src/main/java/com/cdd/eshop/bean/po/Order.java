@@ -47,6 +47,12 @@ public class Order {
      */
     private String activityIds;
 
+
+    /**
+     * 订单封面图url
+     */
+    private String goodsImgUrl;
+
     /**
      * 运费
      */
@@ -72,5 +78,5 @@ public class Order {
     /**
      * 状态
      */
-    private Short Status;
+    private Short status;
 }

@@ -7,10 +7,7 @@ import com.cdd.eshop.common.StatusEnum;
 import com.cdd.eshop.service.OrderService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -37,6 +34,36 @@ public class OrderController extends BaseController {
         return orderService.placeOrder(this.getUserId(request),orderBO);
     }
 
+    @GetMapping("/list")
+    @ApiOperation(value = "列出订单")
+    ResponseDTO listOrder(@RequestParam(value = "status",required = false) Short status,HttpServletRequest request) {
+        return orderService.listOrder(this.getUserId(request),status);
+    }
+
+
+    @PostMapping("/pay")
+    @ApiOperation(value = "列出订单")
+    ResponseDTO payOrder(@RequestParam(value = "orderNumber",required = true) String orderNumber,HttpServletRequest request) {
+        return orderService.payOrder(this.getUserId(request),orderNumber);
+    }
+
+    @PostMapping("/cancle")
+    @ApiOperation(value = "取消订单")
+    ResponseDTO cancelOrder(@RequestParam(value = "orderNumber",required = true) String orderNumber,HttpServletRequest request) {
+        return orderService.cancelOrder(this.getUserId(request),orderNumber);
+    }
+
+    @PostMapping("/delete")
+    @ApiOperation(value = "删除订单")
+    ResponseDTO deleteOrder(@RequestParam(value = "orderNumber",required = true) String orderNumber,HttpServletRequest request) {
+        return orderService.deleteOrder(this.getUserId(request),orderNumber);
+    }
+
+    @GetMapping("/detail")
+    @ApiOperation(value = "列出订单详细")
+    ResponseDTO detailOrder(@RequestParam(value = "orderNumber",required = true) String orderNumber,HttpServletRequest request) {
+        return orderService.deleteOrder(this.getUserId(request),orderNumber);
+    }
 
 
 }

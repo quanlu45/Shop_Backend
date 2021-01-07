@@ -8,6 +8,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.math.BigDecimal;
 
+/**
+ * 订单项
+ *
+ * @author quan
+ * @date 2021/01/07
+ */
 @Data
 @Entity
 @Table(name = "tb_order_item")

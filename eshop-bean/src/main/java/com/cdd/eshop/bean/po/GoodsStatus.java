@@ -1,7 +1,5 @@
 package com.cdd.eshop.bean.po;
 
-import lombok.Data;
-
 import java.util.HashMap;
 
 /**
