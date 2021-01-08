@@ -20,17 +20,6 @@ public interface GoodsImgRepository extends JpaRepository<GoodsImg,Integer> {
 
 
     /**
-     * 通过商品Id找到第一个img
-     *
-     * @param goodsIds 商品id
-     * @return {@link List<GoodsImg>}
-     */
-    @Query("select img.goodsId,img.imgUrl from GoodsImg img " +
-            "where img.goodsId in (:goodsIds)" +
-            "group by img.goodsId")
-    List<GoodsImg> findFirstImgByGoodsIdIn(@Param("goodsIds") List<Integer> goodsIds);
-
-    /**
      * 商品Id删除所有通过图片
      *
      * @param goodsId 商品Id

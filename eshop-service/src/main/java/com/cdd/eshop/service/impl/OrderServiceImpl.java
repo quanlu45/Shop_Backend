@@ -1,6 +1,7 @@
 package com.cdd.eshop.service.impl;
 
 import com.cdd.eshop.bean.bo.order.OrderBO;
+import com.cdd.eshop.bean.bo.order.OrderItemBO;
 import com.cdd.eshop.bean.dto.ResponseDTO;
 import com.cdd.eshop.bean.po.*;
 import com.cdd.eshop.bean.po.activity.Activity;
@@ -64,30 +65,39 @@ public class OrderServiceImpl implements OrderService {
         Order order = new Order();
         order.setUserId(userId);
         order.setOrderNumber(SequenceUtil.get());
-
-        //验证imgId
-        Integer imgId = orderBO.getGoodsImgId();
-        Optional<GoodsImg> imgOptional = goodsImgRepository.findById(imgId);
-        if (!imgOptional.isPresent()){
-            return ResponseDTO.error(StatusEnum.PARAM_ERROR,"商品图片不存在，id= "+imgId);
-        }
-        order.setGoodsImgUrl(imgOptional.get().getImgUrl());
-
         Date now = new Date();
         order.setCreateTime(now);
 
-        //查询数据库中的价格
-        List<OrderItem> orderItemList = orderBO.getOrderItemList();
+        List<OrderItemBO> orderItemBOList = orderBO.getOrderItemList();
 
+        //填充封面图
+        Integer goodsId = orderItemBOList.get(0).getGoodsId();
+        Optional<GoodsImg> imgOptional = goodsImgRepository.findById(goodsId);
+        if (!imgOptional.isPresent()){
+            return ResponseDTO.error(StatusEnum.PARAM_ERROR,"商品图片不存在 "+goodsId);
+        }
+        order.setGoodsImgUrl(imgOptional.get().getImgUrl());
+
+        //查询数据库中的价格
         //<id , item>,减少遍历次数
         HashMap<Integer,OrderItem> itemHashMap = new HashMap<>();
+
+        List<OrderItem> orderItemList = new LinkedList<>();
 
         // id列表，批量查数据库
         List<Integer> goodsIds = new LinkedList<>();
 
-        for (OrderItem item : orderItemList){
-            goodsIds.add(item.getGoodsId());
-            itemHashMap.put(item.getGoodsId(),item);
+        for (OrderItemBO bo : orderItemBOList){
+            goodsIds.add(bo.getGoodsId());
+            OrderItem orderItem = new OrderItem();
+            orderItem.setGoodsId(bo.getGoodsId());
+            orderItem.setAmount(bo.getAmount());
+            orderItem.setFreight(BigDecimal.ZERO);
+            orderItem.setIsDelete(Boolean.FALSE);
+            orderItem.setOrderNumber(order.getOrderNumber());
+            orderItem.setAddressId(bo.getAddressId());
+            orderItemList.add(orderItem);
+            itemHashMap.put(bo.getGoodsId(),orderItem);
         }
 
         //总价
@@ -109,15 +119,15 @@ public class OrderServiceImpl implements OrderService {
                         .msg("商品状态异常!" + GoodsStatus.getStatusFromCode(goods.getStatus()).getDesc());
             }
             //计算总价
-            goods.getGoodsPrice()
-                    .multiply(BigDecimal.valueOf(itemHashMap.get(goods.getGoodsId()).getAmount()))
-                    .add(totalPrice);
+            totalPrice=totalPrice
+                    .add(goods.getGoodsPrice()
+                            .multiply(BigDecimal.valueOf(itemHashMap.get(goods.getGoodsId()).getAmount())));
 
             goodsHashMap.put(goods.getGoodsId(),goods);
             //todo 计算运费，运费应调用第三方物流系统的接口
         }
         order.setTotalPrice(totalPrice);
-        order.setTotalFreight(totalPrice);
+        order.setTotalFreight(freight);
 
 
         List<Integer> activityIds = orderBO.getActivityList();
@@ -151,17 +161,17 @@ public class OrderServiceImpl implements OrderService {
                 //不同规则不同处理，这里为减少复杂度，不做适用商品的验证
                 switch (ActivityRuleType.getTypeFromCode(rule.getRuleType())){
                     case DISCOUNT:
-                        totalDiscount.add(totalPrice.multiply(BigDecimal.valueOf(1-ruleVal)));
+                        totalDiscount=totalDiscount.add(totalPrice.multiply(BigDecimal.valueOf(1-ruleVal)));
                         break;
                     case FULL_REDUCE:
-                        totalDiscount.add(BigDecimal.valueOf(ruleVal));
+                        totalDiscount=totalDiscount.add(BigDecimal.valueOf(ruleVal));
                         break;
                     case ATTACH:
                         //因为规则是按类型降序的，故在这里将前面附送商品加上的价格减掉
                         //没加购物车,则为不参加活动
-                        Integer goodsId = ruleVal.intValue();
+                        goodsId = ruleVal.intValue();
                         if (goodsHashMap.containsKey(goodsId)){
-                            totalPrice.subtract(goodsHashMap.get(goodsId).getGoodsPrice());
+                            totalPrice=totalPrice.subtract(goodsHashMap.get(goodsId).getGoodsPrice());
                         }
                         break;
 
@@ -181,6 +191,7 @@ public class OrderServiceImpl implements OrderService {
         order.setTotalPay(totalPay);
 
         try {
+
             orderRepository.saveAndFlush(order);
             orderItemRepository.saveAll(orderItemList);
             orderItemRepository.flush();
