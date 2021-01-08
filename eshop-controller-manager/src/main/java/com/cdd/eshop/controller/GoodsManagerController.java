@@ -1,8 +1,8 @@
 package com.cdd.eshop.controller;
 
 import com.cdd.eshop.bean.bo.BatchGoodsTypeBO;
+import com.cdd.eshop.bean.bo.GoodsBO;
 import com.cdd.eshop.bean.dto.ResponseDTO;
-import com.cdd.eshop.bean.po.Goods;
 import com.cdd.eshop.bean.po.GoodsType;
 import com.cdd.eshop.common.BaseController;
 import com.cdd.eshop.common.StatusEnum;
@@ -80,8 +80,8 @@ public class GoodsManagerController extends BaseController {
 
     @ApiOperation(value ="新增或更新商品", notes = "不传id则为新增")
     @PostMapping("/saveOrUpdate")
-    ResponseDTO saveOrUpdateGoods(@RequestBody Goods goods) {
-        return goodsService.saveOrUpdateGoods(goods);
+    ResponseDTO saveOrUpdateGoods(@RequestBody GoodsBO goodsBO) {
+        return goodsService.saveOrUpdateGoods(goodsBO);
     }
 
     @GetMapping("/type/tree")
@@ -124,5 +124,4 @@ public class GoodsManagerController extends BaseController {
     ResponseDTO getGoodsTypeById(@RequestParam(value = "typeId",required = true) Integer typeId) {
         return goodsTypeService.getGoodsTypeById(typeId);
     }
-
 }

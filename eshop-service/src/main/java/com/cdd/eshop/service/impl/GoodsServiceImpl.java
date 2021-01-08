@@ -1,21 +1,27 @@
 package com.cdd.eshop.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.cdd.eshop.bean.bo.GoodsBO;
 import com.cdd.eshop.bean.dto.ResponseDTO;
 import com.cdd.eshop.bean.po.Goods;
+import com.cdd.eshop.bean.po.GoodsImg;
 import com.cdd.eshop.bean.po.GoodsStatus;
 import com.cdd.eshop.bean.po.GoodsType;
 import com.cdd.eshop.common.StatusEnum;
+import com.cdd.eshop.mapper.GoodsImgRepository;
 import com.cdd.eshop.mapper.GoodsRepository;
 import com.cdd.eshop.mapper.GoodsTypeRepository;
 import com.cdd.eshop.service.GoodsService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.Predicate;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -34,6 +40,9 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Autowired
     GoodsRepository goodsRepository;
+
+    @Autowired
+    GoodsImgRepository imgRepository;
 
     @Override
     public ResponseDTO getGoodsById(Integer goodsId) {
@@ -102,7 +111,7 @@ public class GoodsServiceImpl implements GoodsService {
             return ResponseDTO.error().msg("不存在此商品或者已经被删除！");
         }
 
-        if (goodsOptional.get().getStatus() == targetStatus){
+        if (goodsOptional.get().getStatus().equals(targetStatus)){
             return ResponseDTO.error(StatusEnum.PARAM_ERROR,"已经是此状态，无需操作!");
         }
 
@@ -110,7 +119,6 @@ public class GoodsServiceImpl implements GoodsService {
             Goods goods = goodsOptional.get();
             goods.setStatus(targetStatus);
             goodsRepository.saveAndFlush(goods);
-
         }catch (Exception e){
             log.error("changeStatus ==> targetStatus ={}, {}" ,targetStatus,e.getCause().getMessage());
             return ResponseDTO.error().msg(e.getCause().getMessage());
@@ -125,24 +133,47 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public ResponseDTO saveOrUpdateGoods(Goods goods) {
+    public ResponseDTO saveOrUpdateGoods(GoodsBO goodsBO) {
 
-        log.debug("saveOrUpdateGoods ==> goodsId ={}", goods.getGoodsId());
+        log.debug("saveOrUpdateGoods ==> goodsId ={}", goodsBO.getGoodsId());
         //验证参数
-        if (StringUtils.isBlank(goods.getGoodsName())
-                || null == goods.getGoodsPrice()
-                || null == goods.getGoodsStock()){
+        if (StringUtils.isBlank(goodsBO.getGoodsName())
+                || null == goodsBO.getGoodsPrice()
+                || null == goodsBO.getGoodsStock()){
 
             return ResponseDTO.error(StatusEnum.PARAM_ERROR,"关键参数为空！");
         }
-        if (null == goods.getStatus()){
-            goods.setStatus(GoodsStatus.WAIT_ON.getCode());
+        if (null == goodsBO.getStatus()){
+            goodsBO.setStatus(GoodsStatus.WAIT_ON.getCode());
         }
         try {
+            Goods goods = new Goods();
+            goods.setGoodsSold(0);
+            BeanUtils.copyProperties(goodsBO,goods);
+
+
+            boolean isUpdate = goods.getGoodsId()!=null;
+
             goodsRepository.saveAndFlush(goods);
-            return ResponseDTO.success().withKeyValueData("goodsId",goods.getGoodsId());
+            //新增商品图片
+            List<String> imgUrls = goodsBO.getGoodsImgUrls();
+            if (imgUrls !=null && imgUrls.size()>0){
+               List<GoodsImg> goodsImgList = new LinkedList<>();
+               imgUrls.forEach(img->{
+                   GoodsImg goodsImg = new GoodsImg();
+                   goodsImg.setImgUrl(img);
+                   goodsImgList.add(goodsImg);
+               });
+               if (isUpdate){
+                   imgRepository.deleteAllByGoodsId(goods.getGoodsId());
+               }
+               imgRepository.saveAll(goodsImgList);
+               imgRepository.flush();
+            }
+
+            return ResponseDTO.success().withKeyValueData("goodsId",goodsBO.getGoodsId());
         }catch (Exception e){
-            log.error("saveOrUpdateGoods ==> goods = {},{}", JSON.toJSONString(goods),e.getCause().getMessage());
+            log.error("saveOrUpdateGoods ==> goods = {},{}", JSON.toJSONString(goodsBO),e.getCause().getMessage());
             return ResponseDTO.error().msg(e.getCause().getMessage());
         }
     }

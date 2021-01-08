@@ -1,7 +1,7 @@
 package com.cdd.eshop.service;
 
+import com.cdd.eshop.bean.bo.GoodsBO;
 import com.cdd.eshop.bean.dto.ResponseDTO;
-import com.cdd.eshop.bean.po.Goods;
 
 /**
  * 商品服务
@@ -72,7 +72,7 @@ public interface GoodsService {
      * @param goods 商品
      * @return {@link ResponseDTO}
      */
-    public ResponseDTO saveOrUpdateGoods(Goods goods);
+    public ResponseDTO saveOrUpdateGoods(GoodsBO goods);
 
 
 }
