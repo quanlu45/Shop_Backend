@@ -52,7 +52,7 @@ public class GoodsController extends BaseController {
 
     @ApiOperation("查询商品的详细信息")
     @GetMapping("/detail")
-    public ResponseDTO getGoodsDetailById(@RequestParam(value = "goodsIdId",required = true)Integer goodsId) {
+    public ResponseDTO getGoodsDetailById(@RequestParam(value = "goodsId",required = true)Integer goodsId) {
         return goodsService.getGoodsById(goodsId);
     }
 
