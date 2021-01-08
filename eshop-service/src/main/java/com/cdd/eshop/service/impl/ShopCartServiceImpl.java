@@ -40,6 +40,19 @@ public class ShopCartServiceImpl implements ShopCartService {
     @Override
     public ResponseDTO addItem(ShopCart shopCartItem) {
         try {
+            List<ShopCart> itemList = shopCartRepository.findAllByUserId(shopCartItem.getUserId());
+
+            //已经存在，则合并
+            if (itemList.size()>0){
+                for (ShopCart item : itemList){
+                    if (item.getCartId().equals(shopCartItem.getCartId())){
+                        item.setAmount(item.getAmount()+1);
+                        shopCartRepository.saveAndFlush(item);
+                        return ResponseDTO.success().withKeyValueData("itemId",item.getCartId());
+                    }
+                }
+            }
+
             shopCartRepository.saveAndFlush(shopCartItem);
             return ResponseDTO.success().withKeyValueData("itemId",shopCartItem.getCartId());
         }catch (Exception e){
