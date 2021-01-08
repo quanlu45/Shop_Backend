@@ -293,7 +293,7 @@ public class OrderServiceImpl implements OrderService {
             itemHashMap.put(item.getGoodsId(),item);
         }
         List<Goods> goodsList = goodsRepository.findAllByGoodsIdIn(goodsIds);
-        List<GoodsImg> goodsImgList = goodsImgRepository.findFirstImgByGoodsIdIn(goodsIds);
+        List<GoodsImg> goodsImgList = goodsImgRepository.findAllByGoodsIdIn(goodsIds);
 
         List<OrderItemVO> itemVOList = new LinkedList<>();
         for (Goods goods : goodsList){

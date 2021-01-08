@@ -45,7 +45,7 @@ public class ShopCartServiceImpl implements ShopCartService {
             //已经存在，则合并
             if (itemList.size()>0){
                 for (ShopCart item : itemList){
-                    if (item.getCartId().equals(shopCartItem.getCartId())){
+                    if (item.getGoodsId().equals(shopCartItem.getGoodsId())){
                         item.setAmount(item.getAmount()+1);
                         shopCartRepository.saveAndFlush(item);
                         return ResponseDTO.success().withKeyValueData("itemId",item.getCartId());
@@ -99,9 +99,11 @@ public class ShopCartServiceImpl implements ShopCartService {
         }
 
         //填充商品图片
-        List<GoodsImg> goodsImgList =goodsImgRepository.findFirstImgByGoodsIdIn(goodsIds);
+        List<GoodsImg> goodsImgList =goodsImgRepository.findAllByGoodsIdIn(goodsIds);
+
         for (GoodsImg img: goodsImgList){
             ShopCartItemVO vo = voHashMap.get(img.getGoodsId());
+            if (vo.getGoodsImgUrl()!=null) continue;;
             vo.setGoodsImgUrl(img.getImgUrl());
         }
         return ResponseDTO.success().withKeyValueData("cartItemList",voHashMap.values());

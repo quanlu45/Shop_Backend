@@ -18,7 +18,7 @@ import java.util.List;
 @Repository
 public interface GoodsRepository extends JpaRepository<Goods,Integer>, JpaSpecificationExecutor<Goods> {
 
-    @Query("select g.goodsId,g.goodsPrice,g.status from Goods g where g.goodsId in (:ids)")
+    @Query("select g from Goods g where g.goodsId in (:ids)")
     List<Goods> findAllByGoodsIdIn(@Param("ids")List<Integer> ids);
 
 }
