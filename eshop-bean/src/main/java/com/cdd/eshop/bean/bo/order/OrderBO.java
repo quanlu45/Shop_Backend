@@ -18,13 +18,7 @@ import java.util.List;
 public class OrderBO {
 
     @ApiModelProperty(value = "商品列表对")
-    private List<OrderItem> orderItemList;
-
-    @ApiModelProperty(value = "是否来自购物车结算")
-    private Boolean isFromShopCart;
-
-    @ApiModelProperty(value = "订单封面图")
-    private Integer goodsImgId;
+    private List<OrderItemBO> orderItemList;
 
     @ApiModelProperty(value = "活动列表")
     private List<Integer> activityList;

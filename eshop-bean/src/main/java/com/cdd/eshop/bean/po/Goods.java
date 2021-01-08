@@ -2,6 +2,8 @@ package com.cdd.eshop.bean.po;
 
 
 import lombok.Data;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -14,6 +16,8 @@ import java.math.BigDecimal;
  */
 @Data
 @Entity
+@DynamicInsert
+@DynamicUpdate
 @Table(name = "tb_goods")
 public class Goods {
 

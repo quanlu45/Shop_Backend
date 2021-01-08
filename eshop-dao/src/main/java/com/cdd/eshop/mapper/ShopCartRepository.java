@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,9 +20,9 @@ import java.util.List;
 @Repository
 public interface ShopCartRepository extends JpaRepository<ShopCart,Integer> {
 
-    @Transient
     @Modifying
-    @Query("delete from ShopCart  sc where sc.userId =: userId and sc.cartId =: cartId")
+    @Transactional
+    @Query("delete from ShopCart  sc where sc.userId =:userId and sc.cartId =:cartId")
     int deleteByUserIdAndCartId(@Param("userId") Integer userId,@Param("cartId") Integer cartId);
 
     @Query("select s from ShopCart s where s.userId=:userId")

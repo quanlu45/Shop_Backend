@@ -2,6 +2,8 @@ package com.cdd.eshop.bean.po;
 
 
 import lombok.Data;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -16,6 +18,8 @@ import java.math.BigDecimal;
  */
 @Data
 @Entity
+@DynamicInsert
+@DynamicUpdate
 @Table(name = "tb_order_item")
 public class OrderItem {
 

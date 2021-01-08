@@ -1,6 +1,8 @@
 package com.cdd.eshop.bean.po.activity;
 
 import lombok.Data;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -13,6 +15,8 @@ import java.util.Date;
  */
 @Data
 @Entity
+@DynamicInsert
+@DynamicUpdate
 @Table(name = "tb_activity")
 public class Activity {
 

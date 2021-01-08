@@ -1,6 +1,8 @@
 package com.cdd.eshop.bean.po.activity;
 
 import lombok.Data;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.List;
@@ -14,6 +16,8 @@ import java.util.List;
 
 @Data
 @Entity
+@DynamicInsert
+@DynamicUpdate
 @Table(name = "tb_activity_rule")
 public class ActivityRule{
     /**
