@@ -48,10 +48,10 @@ public class ActivityRule{
      */
     private Integer activityId;
 
-    /**
-     * 规则关系商品列表
-     */
-    @OneToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER,orphanRemoval=true)
-    private List<RuleGoods> ruleRelationGoodsList;
+//    /**
+//     * 规则关系商品列表
+//     */
+//    @OneToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER,orphanRemoval=true)
+//    private List<RuleGoods> ruleRelationGoodsList;
 
 }
