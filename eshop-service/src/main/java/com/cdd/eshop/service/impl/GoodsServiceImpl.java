@@ -111,6 +111,7 @@ public class GoodsServiceImpl implements GoodsService {
 
         GoodsType queryCondition = new GoodsType();
         queryCondition.setIsDelete(Boolean.FALSE);
+        queryCondition.setTypeCode(goodsTypeCode);
         Optional<GoodsType> goodsTypeOptional = goodsTypeRepository.findOne(Example.of(queryCondition));
 
         if (!goodsTypeOptional.isPresent()){
