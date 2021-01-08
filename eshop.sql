@@ -105,7 +105,7 @@ amount int not null default 0 comment 'ÉÌÆ·ÊıÁ¿'
 
 /*ÉÌÆ·¶©µ¥±í*/
 create table tb_order(
-order_number varchar(15) not null comment '¶©µ¥±àºÅ',
+order_number varchar(25) not null comment '¶©µ¥±àºÅ',
 user_id int not null comment '¹ØÁªÓÃ»§id',
 create_time datetime not null default now() comment '¶©µ¥´´½¨Ê±¼ä',
 finish_time datetime not null default now() comment '¶©µ¥Íê³ÉÊ±¼ä, ÒÑÊÕ»õ»òÒÑÍË¿î¡¢ÒÑ¹Ø±ÕÊ±¸üĞÂ½áÊøÊ±¼ä',
@@ -122,7 +122,7 @@ status tinyint not null default 0 comment '¶©µ¥×´Ì¬ 0 ´ı¸¶¿î£¬1 ´ı·¢»õ £¬2 ´ıÊÕ»
 
 /*ÉÌÆ·¶©µ¥ÉÌÆ·Çåµ¥*/
 create table tb_order_item(
-order_number varchar(15) not null comment '¹ØÁª¶©µ¥±àºÅ',
+order_number varchar(25) not null comment '¹ØÁª¶©µ¥±àºÅ',
 goods_id int not null comment '¹ØÁªÉÌÆ·',
 address_id int not null comment 'ÅäËÍµØÖ·',
 freight decimal(12,5) not null default 0 comment 'ÔË·Ñ',
