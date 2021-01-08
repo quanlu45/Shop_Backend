@@ -1,6 +1,7 @@
 package com.cdd.eshop.service;
 
 import com.cdd.eshop.bean.dto.ResponseDTO;
+import com.cdd.eshop.bean.po.Goods;
 
 /**
  * 商品服务
@@ -63,6 +64,15 @@ public interface GoodsService {
      * @return {@link ResponseDTO}
      */
     public ResponseDTO deleteGoodsById(Integer goodsId);
+
+
+    /**
+     * 保存或更新商品
+     *
+     * @param goods 商品
+     * @return {@link ResponseDTO}
+     */
+    public ResponseDTO saveOrUpdateGoods(Goods goods);
 
 
 }

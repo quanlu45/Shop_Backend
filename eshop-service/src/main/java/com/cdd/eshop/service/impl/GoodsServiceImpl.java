@@ -1,13 +1,16 @@
 package com.cdd.eshop.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.cdd.eshop.bean.dto.ResponseDTO;
 import com.cdd.eshop.bean.po.Goods;
+import com.cdd.eshop.bean.po.GoodsStatus;
 import com.cdd.eshop.bean.po.GoodsType;
 import com.cdd.eshop.common.StatusEnum;
 import com.cdd.eshop.mapper.GoodsRepository;
 import com.cdd.eshop.mapper.GoodsTypeRepository;
 import com.cdd.eshop.service.GoodsService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -118,17 +121,40 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Override
     public ResponseDTO deleteGoodsById(Integer goodsId) {
-        return this.changeStatus(goodsId, (short) 3);
+        return this.changeStatus(goodsId,GoodsStatus.DELETE.getCode());
+    }
+
+    @Override
+    public ResponseDTO saveOrUpdateGoods(Goods goods) {
+
+        log.debug("saveOrUpdateGoods ==> goodsId ={}", goods.getGoodsId());
+        //验证参数
+        if (StringUtils.isBlank(goods.getGoodsName())
+                || null == goods.getGoodsPrice()
+                || null == goods.getGoodsStock()){
+
+            return ResponseDTO.error(StatusEnum.PARAM_ERROR,"关键参数为空！");
+        }
+        if (null == goods.getStatus()){
+            goods.setStatus(GoodsStatus.WAIT_ON.getCode());
+        }
+        try {
+            goodsRepository.saveAndFlush(goods);
+            return ResponseDTO.success().withKeyValueData("goodsId",goods.getGoodsId());
+        }catch (Exception e){
+            log.error("saveOrUpdateGoods ==> goods = {},{}", JSON.toJSONString(goods),e.getCause().getMessage());
+            return ResponseDTO.error().msg(e.getCause().getMessage());
+        }
     }
 
     @Override
     public ResponseDTO putOn(Integer goodsId) {
-        return this.changeStatus(goodsId,(short)1);
+        return this.changeStatus(goodsId,GoodsStatus.ON.getCode());
     }
 
     @Override
     public ResponseDTO putOff(Integer goodsId) {
-        return this.changeStatus(goodsId,(short)2);
+        return this.changeStatus(goodsId,GoodsStatus.OFF.getCode());
     }
 
 }
