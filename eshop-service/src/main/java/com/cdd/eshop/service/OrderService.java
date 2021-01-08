@@ -66,4 +66,33 @@ public interface OrderService {
      */
     ResponseDTO detailOrder(Integer userId,String orderNumber);
 
+
+    /**
+     * 签收订单
+     *
+     * @param userId      用户Id
+     * @param orderNumber 订单数量
+     * @return {@link ResponseDTO}
+     */
+    ResponseDTO receiptOrder(Integer userId,String orderNumber);
+
+    /**
+     * 发货
+     *
+     * @param orderNumber 订单编号
+     * @return {@link ResponseDTO}
+     */
+    ResponseDTO shipOrder(String orderNumber);
+
+
+    /**
+     * 退款订单
+     *
+     * @param orderNumber 订单编号
+     * @return {@link ResponseDTO}
+     */
+    ResponseDTO refundOrder(String orderNumber);
+
+
+
 }

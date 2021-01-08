@@ -236,6 +236,13 @@ public class OrderServiceImpl implements OrderService {
                 return ResponseDTO.error().msg("订单状态流转失败！关闭之前不可删除！");
             }
         }
+
+        //未发货之前不可确认收货
+        if (targetStatus.equals(OrderStatusEnum.RECEIPTED)){
+            if (!order.getStatus().equals(OrderStatusEnum.WAIT_RECEIPT.getCode())){
+                return ResponseDTO.error().msg("订单状态流转失败！未发货之前不可确认收货！");
+            }
+        }
         order.setStatus(targetStatus.getCode());
         orderRepository.saveAndFlush(order);
         return ResponseDTO.success();
@@ -320,6 +327,45 @@ public class OrderServiceImpl implements OrderService {
             detailVO.setActivityList(activityList);
         }
         return ResponseDTO.success().data(detailVO);
+    }
+
+    @Override
+    public ResponseDTO receiptOrder(Integer userId, String orderNumber) {
+        return this.changeStatus(userId,orderNumber,OrderStatusEnum.RECEIPTED);
+    }
+
+    @Override
+    public ResponseDTO shipOrder(String orderNumber) {
+        //订单编号校验
+        Optional<Order> optionalOrder = orderRepository.findById(orderNumber);
+        if (!optionalOrder.isPresent()){
+            return ResponseDTO.error(StatusEnum.PARAM_ERROR,"订单不存在！");
+        }
+        Order order = optionalOrder.get();
+
+        if (!order.getStatus().equals(OrderStatusEnum.WAIT_SHIP.getCode())){
+            return ResponseDTO.error().msg("订单状态流转失败！订单未在等待发货中！");
+        }
+        order.setStatus(OrderStatusEnum.RECEIPTED.getCode());
+        orderRepository.saveAndFlush(order);
+        return ResponseDTO.success();
+    }
+
+    @Override
+    public ResponseDTO refundOrder(String orderNumber) {
+        //订单编号校验
+        Optional<Order> optionalOrder = orderRepository.findById(orderNumber);
+        if (!optionalOrder.isPresent()){
+            return ResponseDTO.error(StatusEnum.PARAM_ERROR,"订单不存在！");
+        }
+        Order order = optionalOrder.get();
+
+        if (!order.getStatus().equals(OrderStatusEnum.WAIT_SHIP.getCode())){
+            return ResponseDTO.error().msg("订单状态流转失败！订单未在等待退款中！");
+        }
+        order.setStatus(OrderStatusEnum.RECEIPTED.getCode());
+        orderRepository.saveAndFlush(order);
+        return ResponseDTO.success();
     }
 }
 
