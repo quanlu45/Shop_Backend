@@ -32,9 +32,5 @@ public class GoodsImg {
      */
     private String imgUrl;
 
-    /**
-     * 是否删除
-     */
-    private Boolean isDelete;
 
 }

@@ -7,6 +7,7 @@ import com.cdd.eshop.bean.po.Goods;
 import com.cdd.eshop.bean.po.GoodsImg;
 import com.cdd.eshop.bean.po.GoodsStatus;
 import com.cdd.eshop.bean.po.GoodsType;
+import com.cdd.eshop.bean.vo.GoodsVO;
 import com.cdd.eshop.common.StatusEnum;
 import com.cdd.eshop.mapper.GoodsImgRepository;
 import com.cdd.eshop.mapper.GoodsRepository;
@@ -20,9 +21,11 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.Predicate;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * 商品服务实现类
@@ -51,7 +54,16 @@ public class GoodsServiceImpl implements GoodsService {
         if (!goodsOptional.isPresent() || goodsOptional.get().getStatus() == 3){
             return ResponseDTO.error().msg("商品不存在或已删除！");
         }
-        return ResponseDTO.success().data(goodsOptional.get());
+        List<GoodsImg> imgs = imgRepository.findAllByGoodsId(goodsId);
+        GoodsVO vo = new GoodsVO();
+        BeanUtils.copyProperties(goodsOptional.get(),vo);
+        vo.setGoodsImgs(
+                imgs.stream()
+                        .map(GoodsImg::getImgUrl)
+                        .collect(Collectors.toList())
+        );
+
+        return ResponseDTO.success().data(vo);
     }
 
     @Override
@@ -69,7 +81,25 @@ public class GoodsServiceImpl implements GoodsService {
             return query.where(pre).getRestriction();
         },pageable);
 
-        return ResponseDTO.success().data(goodsPage);
+        List<Integer> goodsId = goodsPage.stream()
+                .map(Goods::getGoodsId)
+                .collect(Collectors.toList());
+
+        List<GoodsImg> imgList = imgRepository.findAllByGoodsIdIn(goodsId);
+
+        Page<GoodsVO> voPage = goodsPage.map(goods -> {
+            GoodsVO vo = new GoodsVO();
+            BeanUtils.copyProperties(goods,vo);
+            List<String> imgs = new LinkedList<>();
+            for (GoodsImg img:imgList){
+                if (vo.getGoodsId().equals(img.getGoodsId())){
+                    imgs.add(img.getImgUrl());
+                }
+            }
+            vo.setGoodsImgs(imgs);
+            return vo;
+        });
+        return ResponseDTO.success().data(voPage);
     }
 
     @Override
@@ -99,8 +129,25 @@ public class GoodsServiceImpl implements GoodsService {
             pre[1] = builder.like(root.get("goodsTypeCode").as(String.class), regx);
             return query.where(pre).getRestriction();
         },pageable);
+        List<Integer> goodsId = goodsPage.stream()
+                .map(Goods::getGoodsId)
+                .collect(Collectors.toList());
 
-        return ResponseDTO.success().data(goodsPage);
+        List<GoodsImg> imgList = imgRepository.findAllByGoodsIdIn(goodsId);
+
+        Page<GoodsVO> voPage = goodsPage.map(goods -> {
+            GoodsVO vo = new GoodsVO();
+            BeanUtils.copyProperties(goods,vo);
+            List<String> imgs = new LinkedList<>();
+            for (GoodsImg img:imgList){
+                if (vo.getGoodsId().equals(img.getGoodsId())){
+                    imgs.add(img.getImgUrl());
+                }
+            }
+            vo.setGoodsImgs(imgs);
+            return vo;
+        });
+        return ResponseDTO.success().data(voPage);
     }
 
 

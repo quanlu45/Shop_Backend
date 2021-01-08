@@ -36,7 +36,7 @@ type_id int primary key auto_increment comment 'ÉÌÆ·ÀàĞÍid',
 type_code varchar (11) not null comment 'ÉÌÆ·ÀàĞÍcode',
 type_name varchar(25) not null comment 'ÉÌÆ·ÀàĞÍÃû³Æ',
 type_desc varchar(255) comment 'ÉÌÆ·ÀàĞÍÃèÊö',
-parent_type_code int not null default 0 comment '¸¸ÀàÀàĞÍcode',
+parent_type_code varchar (11) not null default '0' comment '¸¸ÀàÀàĞÍcode',
 is_delete tinyint default 0 comment 'Âß¼­É¾³ı±êÖ¾Î»£¬0 Õı³££¬1 Âß¼­É¾³ı'
 );
 
@@ -57,8 +57,8 @@ status tinyint default 0 comment '×´Ì¬±êÖ¾Î»£¬0 ´ıÉÏ¼Ü£¬1 ÒÑÉÏ¼Ü  2 ÒÑÏÂ¼Ü £¬3 Â
 create table tb_goods_img(
 img_id int primary key auto_increment comment 'Í¼Æ¬id',
 goods_id int not null comment 'ÉÌÆ·id',
-img_url varchar(50) not null comment 'ÉÌÆ·url',
-is_delete varchar(255) not null default 0 comment 'Âß¼­É¾³ı±êÖ¾Î»,0 Õı³£ £¬1 ÒÑÉ¾³ı'
+img_url varchar(255) not null comment 'ÉÌÆ·url',
+is_delete tinyint not null default 0 comment 'Âß¼­É¾³ı±êÖ¾Î»,0 Õı³£ £¬1 ÒÑÉ¾³ı'
 );
 
 

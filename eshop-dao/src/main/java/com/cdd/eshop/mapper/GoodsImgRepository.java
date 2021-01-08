@@ -26,11 +26,36 @@ public interface GoodsImgRepository extends JpaRepository<GoodsImg,Integer> {
      * @return {@link List<GoodsImg>}
      */
     @Query("select img.goodsId,img.imgUrl from GoodsImg img " +
-            "where img.goodsId in (:goodsIds) and img.isDelete = 0 " +
+            "where img.goodsId in (:goodsIds)" +
             "group by img.goodsId")
     List<GoodsImg> findFirstImgByGoodsIdIn(@Param("goodsIds") List<Integer> goodsIds);
 
+    /**
+     * 商品Id删除所有通过图片
+     *
+     * @param goodsId 商品Id
+     */
     @Modifying
-    @Query("update GoodsImg img set img.isDelete =1 where img.goodsId=:goodsId")
+    @Query("delete from GoodsImg img where img.goodsId=:goodsId")
     void deleteAllByGoodsId(@Param("goodsId") Integer goodsId);
+
+    /**
+     * 通过商品Id列表找到所有图片
+     *
+     * @param goodsIds 商品id
+     * @return {@link List<GoodsImg>}
+     */
+    @Query("select img from GoodsImg img " +
+            "where img.goodsId in (:goodsIds) ")
+    List<GoodsImg> findAllByGoodsIdIn(@Param("goodsIds") List<Integer> goodsIds);
+
+    /**
+     * 过商品Id找到所有图片
+     *
+     * @param goodsId 商品Id
+     * @return {@link List<GoodsImg>}
+     */
+    @Query("select img from GoodsImg img " +
+            "where img.goodsId =:goodsId ")
+    List<GoodsImg> findAllByGoodsId(@Param("goodsId")Integer goodsId);
 }
