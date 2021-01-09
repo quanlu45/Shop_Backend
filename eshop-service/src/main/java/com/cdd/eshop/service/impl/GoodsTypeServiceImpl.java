@@ -43,12 +43,27 @@ public class GoodsTypeServiceImpl implements GoodsTypeService {
 
     @Override
     public ResponseDTO saveOrUpdateGoodsType(GoodsType type) {
-        type.setIsDelete(null);
+        type.setIsDelete(false);
+        GoodsType old = null;
         try {
-
             //todo 这里暂时随机一个code，以后再搞，本想子类code前缀串是父类
-            type.setTypeCode(UUID.randomUUID().toString().substring(0,5));
-            goodsTypeRepository.saveAndFlush(type);
+            if (type.getTypeId() == null){
+                type.setTypeCode(UUID.randomUUID().toString().substring(0,5));
+                old = type;
+            }else{
+                Optional<GoodsType> optional = goodsTypeRepository.findById(type.getTypeId());
+                if (!optional.isPresent()){
+                    return ResponseDTO.error(StatusEnum.PARAM_ERROR,"id不存在！");
+                }else {
+                    old = optional.get();
+                    if (type.getTypeDesc()!=null){
+                        old.setTypeDesc(type.getTypeDesc());
+                        old.setTypeName(type.getTypeName());
+                    }
+                }
+            }
+
+            goodsTypeRepository.saveAndFlush(old);
             return ResponseDTO.success().withKeyValueData("typeId",type.getTypeId());
         }catch (Exception e){
             log.info("saveOrUpdateGoodsType===> {} ,type ={}",e.getCause().getMessage(), JSON.toJSONString(type));
