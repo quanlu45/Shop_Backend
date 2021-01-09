@@ -8,7 +8,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 
 @EnableCaching
-@EnableSwagger2
 @SuppressWarnings("ALL")
 @EnableJpaRepositories(basePackages={"com.cdd.eshop.*"})
 @SpringBootApplication(scanBasePackages = "com.cdd.eshop")
