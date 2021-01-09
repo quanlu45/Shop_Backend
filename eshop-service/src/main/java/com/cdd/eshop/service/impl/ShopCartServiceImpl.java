@@ -46,7 +46,7 @@ public class ShopCartServiceImpl implements ShopCartService {
             if (itemList.size()>0){
                 for (ShopCart item : itemList){
                     if (item.getGoodsId().equals(shopCartItem.getGoodsId())){
-                        item.setAmount(item.getAmount()+1);
+                        item.setAmount(item.getAmount()+shopCartItem.getAmount());
                         shopCartRepository.saveAndFlush(item);
                         return ResponseDTO.success().withKeyValueData("itemId",item.getCartId());
                     }
