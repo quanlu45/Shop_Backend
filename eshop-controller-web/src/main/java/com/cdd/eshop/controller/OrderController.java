@@ -42,7 +42,7 @@ public class OrderController extends BaseController {
 
 
     @PostMapping("/pay")
-    @ApiOperation(value = "列出订单")
+    @ApiOperation(value = "支付订单")
     ResponseDTO payOrder(@RequestParam(value = "orderNumber",required = true) String orderNumber,HttpServletRequest request) {
         return orderService.payOrder(this.getUserId(request),orderNumber);
     }
