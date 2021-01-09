@@ -19,7 +19,7 @@ public interface OrderItemRepository extends JpaRepository<OrderItem,Integer> {
 
 
     @Query("select oi from OrderItem oi " +
-            "where oi.orderNumber =:orderNumbers " +
+            "where oi.orderNumber =:orderNumber " +
             "order by oi.goodsId")
     List<OrderItem> findAllByOrderNumber(@Param("orderNumber")String orderNumber);
 
