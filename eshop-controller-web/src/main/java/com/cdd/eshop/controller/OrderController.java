@@ -62,7 +62,7 @@ public class OrderController extends BaseController {
     @GetMapping("/detail")
     @ApiOperation(value = "列出订单详细")
     ResponseDTO detailOrder(@RequestParam(value = "orderNumber",required = true) String orderNumber,HttpServletRequest request) {
-        return orderService.deleteOrder(this.getUserId(request),orderNumber);
+        return orderService.detailOrder(this.getUserId(request),orderNumber);
     }
 
 
