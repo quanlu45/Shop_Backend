@@ -65,5 +65,11 @@ public class OrderController extends BaseController {
         return orderService.detailOrder(this.getUserId(request),orderNumber);
     }
 
+    @GetMapping("/receipt")
+    @ApiOperation(value = "签收订单")
+    ResponseDTO receiptOrder(@RequestParam(value = "orderNumber",required = true) String orderNumber,HttpServletRequest request) {
+        return orderService.detailOrder(this.getUserId(request),orderNumber);
+    }
+
 
 }
