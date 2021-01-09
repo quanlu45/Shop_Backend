@@ -28,4 +28,6 @@ public class User{
     private String pwd;
 
     private Short status;
+
+    private Boolean isAdmin=false;
 }

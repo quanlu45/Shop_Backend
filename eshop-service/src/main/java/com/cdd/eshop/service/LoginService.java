@@ -38,4 +38,9 @@ public interface LoginService {
      * @return {@link ResponseDTO}
      */
     ResponseDTO register(User user);
+
+    ResponseDTO loginAdmin(String userName,String password);
+
+    ResponseDTO registerAdmin(User user);
+
 }
