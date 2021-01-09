@@ -45,6 +45,9 @@ public class GoodsTypeServiceImpl implements GoodsTypeService {
     public ResponseDTO saveOrUpdateGoodsType(GoodsType type) {
         type.setIsDelete(null);
         try {
+
+            //todo 这里暂时随机一个code，以后再搞，本想子类code前缀串是父类
+            type.setTypeCode(UUID.randomUUID().toString().substring(0,5));
             goodsTypeRepository.saveAndFlush(type);
             return ResponseDTO.success().withKeyValueData("typeId",type.getTypeId());
         }catch (Exception e){
