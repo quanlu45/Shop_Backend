@@ -326,18 +326,21 @@ public class OrderServiceImpl implements OrderService {
         detailVO.setOrderItemList(itemVOList);
 
         //填充活动列表
-        String[] activityArray = order.getActivityIds().split(",");
-
-        if (activityArray.length >1){
-            List<Integer> activities = new LinkedList<>();
-            for (String s : activityArray) {
-                try {
-                    activities.add(Integer.parseInt(s));
-                } catch (Exception ignored) {
+        String[] activityArray = null;
+        if(order.getActivityIds()!=null){
+            activityArray = order.getActivityIds().split(",");
+            if (activityArray.length >1){
+                List<Integer> activities = new LinkedList<>();
+                for (String s : activityArray) {
+                    try {
+                        activities.add(Integer.parseInt(s));
+                    } catch (Exception ignored) {
+                    }
                 }
+                List<Activity> activityList = activityRepository.findAllById(activities);
+                detailVO.setActivityList(activityList);
             }
-            List<Activity> activityList = activityRepository.findAllById(activities);
-            detailVO.setActivityList(activityList);
+
         }
         return ResponseDTO.success().data(detailVO);
     }
