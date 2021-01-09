@@ -214,6 +214,7 @@ public class OrderServiceImpl implements OrderService {
         List<OrderVO> voList = new LinkedList<>();
         orderList.forEach(order -> {
             OrderVO vo = new OrderVO();
+            vo.setOrderNumber(order.getOrderNumber());
             vo.setCreateTime(order.getCreateTime());
             vo.setGoodsImgUrl(order.getGoodsImgUrl());
             vo.setStatus(order.getStatus());
