@@ -34,9 +34,14 @@ public class BaseController {
      * @return {@link Integer}
      */
     protected Integer getUserId(HttpServletRequest request){
+        String token = request.getHeader("accesstoken");
+        if (token == null){
+            return null;
+        }
         return JwtUtil.verifyAndGetIntegerClaim(
                 tokenPrivateKey,
-                request.getHeader("accesstoken"),
+                token
+                ,
                 "userId");
     }
 
