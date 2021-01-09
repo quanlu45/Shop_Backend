@@ -218,6 +218,7 @@ public class OrderServiceImpl implements OrderService {
             vo.setGoodsImgUrl(order.getGoodsImgUrl());
             vo.setStatus(order.getStatus());
             vo.setTotalPay(order.getTotalPay());
+            voList.add(vo);
         });
         return ResponseDTO.success().data(voList);
     }
