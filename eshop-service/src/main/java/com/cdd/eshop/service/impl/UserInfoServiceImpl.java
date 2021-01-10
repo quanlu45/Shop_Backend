@@ -133,7 +133,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         condition.setStatus(status);
 
         //组装分页参数
-        Pageable pageable = PageRequest.of(pageNumber,pageSize, Sort.Direction.ASC,"goodsId");
+        Pageable pageable = PageRequest.of(pageNumber,pageSize, Sort.Direction.ASC,"userId");
 
         Page<User> userPage = userRepository.findAll(Example.of(condition),pageable);
 
