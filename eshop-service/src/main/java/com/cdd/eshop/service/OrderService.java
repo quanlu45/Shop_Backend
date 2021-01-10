@@ -7,7 +7,7 @@ import com.cdd.eshop.bean.dto.ResponseDTO;
 /**
  * 订单服务
  *
- * @author quan
+ * @author NeJan
  * @date 2021/01/06
  */
 public interface OrderService {
