@@ -98,13 +98,13 @@ public class AdminController extends BaseController {
     @PostMapping("block")
     @ApiOperation("拉黑/禁用账号")
     ResponseDTO blockUser(@RequestParam(value = "userId",required = true) Integer userId) {
-        return null;
+        return userInfoService.blockUser(userId);
     }
 
     @PostMapping("unblock")
     @ApiOperation("解禁账号")
     ResponseDTO unblockUser(@RequestParam(value = "userId",required = true) Integer userId) {
-        return null;
+        return userInfoService.unblockUser(userId);
     }
 
 }
