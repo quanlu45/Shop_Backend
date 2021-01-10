@@ -102,8 +102,11 @@ public class GoodsTypeServiceImpl implements GoodsTypeService {
     @Override
     public ResponseDTO deleteGoodsTypeById(Integer typeId) {
 
-        GoodsType type = new GoodsType();
-        type.setTypeId(typeId);
+        Optional<GoodsType> goodsTypeOptional = goodsTypeRepository.findById(typeId);
+        if (!goodsTypeOptional.isPresent() || goodsTypeOptional.get().getIsDelete()){
+            return ResponseDTO.error(StatusEnum.PARAM_ERROR,"无此id类型或已删除！");
+        }
+        GoodsType type = goodsTypeOptional.get();
         type.setIsDelete(Boolean.TRUE);
         try{
             goodsTypeRepository.saveAndFlush(type);
