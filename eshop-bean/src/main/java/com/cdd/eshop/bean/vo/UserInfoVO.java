@@ -31,4 +31,7 @@ public class UserInfoVO {
     @ApiModelProperty("头像url")
     String avatarUrl;
 
+    @ApiModelProperty("状态")
+    Short status;
+
 }
