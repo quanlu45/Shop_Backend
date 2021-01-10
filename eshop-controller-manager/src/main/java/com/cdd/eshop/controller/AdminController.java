@@ -3,7 +3,6 @@ package com.cdd.eshop.controller;
 
 import com.cdd.eshop.bean.bo.LoginBO;
 import com.cdd.eshop.bean.dto.ResponseDTO;
-import com.cdd.eshop.bean.po.Address;
 import com.cdd.eshop.bean.po.User;
 import com.cdd.eshop.bean.vo.UserInfoVO;
 import com.cdd.eshop.common.BaseController;
@@ -80,6 +79,32 @@ public class AdminController extends BaseController {
             user.setUserId(this.getUserId(request));
         }
         return userInfoService.updateUserInfoById(user);
+    }
+
+
+    @GetMapping("/list")
+    @ApiOperation("列出用户/管理员信息")
+    ResponseDTO listUser(@RequestParam(value = "isAdmin",required = false) Boolean isAdmin,
+                         @RequestParam(value = "pageNumber",required = false)Integer pageNumber,
+                         @RequestParam(value = "pageSize",required = false)Integer pageSize,
+                         @RequestParam(value = "status",required = false)Short status){
+
+        return userInfoService.listUser(isAdmin == null?Boolean.FALSE:isAdmin,
+                pageNumber==null?defaultPageNumber:pageNumber,
+                pageSize==null?defaultPageSize:pageSize,
+                status);
+    }
+
+    @PostMapping("block")
+    @ApiOperation("拉黑/禁用账号")
+    ResponseDTO blockUser(@RequestParam(value = "userId",required = true) Integer userId) {
+        return null;
+    }
+
+    @PostMapping("unblock")
+    @ApiOperation("解禁账号")
+    ResponseDTO unblockUser(@RequestParam(value = "userId",required = true) Integer userId) {
+        return null;
     }
 
 }

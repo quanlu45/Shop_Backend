@@ -68,6 +68,36 @@ public interface UserInfoService {
     ResponseDTO listAddress(Integer userId);
 
 
+    /**
+     * 用户列表
+     * 列表管理
+     *
+     * @param isAdmin    是否为管理员
+     * @param pageNumber 页码
+     * @param pageSize   页面大小
+     * @param status     状态
+     * @return {@link ResponseDTO}
+     */
+    ResponseDTO listUser(Boolean isAdmin,Integer pageNumber,Integer pageSize,Short status);
+
+    /**
+     * 阻止用户
+     *
+     * @param userId 用户Id
+     * @return {@link ResponseDTO}
+     */
+    ResponseDTO blockUser(Integer userId);
+
+    /**
+     * 开启用户
+     *
+     * @param userId 用户Id
+     * @return {@link ResponseDTO}
+     */
+    ResponseDTO unblockUser(Integer userId);
+
+
+
 }
 
 

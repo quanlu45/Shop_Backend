@@ -14,10 +14,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -121,5 +123,64 @@ public class UserInfoServiceImpl implements UserInfoService {
     public ResponseDTO listAddress(Integer userId) {
         List<Address> addressList = addressRepository.selectAllByUserId(userId);
         return ResponseDTO.success().data(addressList);
+    }
+
+    @Override
+    public ResponseDTO listUser(Boolean isAdmin,Integer pageNumber,Integer pageSize,Short status) {
+
+        User condition = new User();
+        condition.setIsAdmin(isAdmin);
+        condition.setStatus(status);
+
+        //组装分页参数
+        Pageable pageable = PageRequest.of(pageNumber,pageSize, Sort.Direction.ASC,"goodsId");
+
+        Page<User> userPage = userRepository.findAll(Example.of(condition),pageable);
+
+        Page<UserInfoVO> voPage = userPage.map(user -> {
+            UserInfoVO vo = new UserInfoVO();
+            BeanUtils.copyProperties(user,vo);
+            return vo;
+        });
+
+        return ResponseDTO.success().data(voPage);
+    }
+
+
+    /**
+     * 改变用户状态
+     *
+     * @param userId 用户Id
+     * @param target 目标
+     * @return {@link ResponseDTO}
+     */
+    private ResponseDTO changeUserStatus(Integer userId,Short target){
+
+        User condition = new User();
+        condition.setUserId(userId);
+
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (!userOptional.isPresent() || userOptional.get().getStatus() == 2) {
+            return ResponseDTO.error(StatusEnum.PARAM_ERROR,"该用户不存在或者已删除！");
+        }
+        User user = userOptional.get();
+
+        if (user.getStatus().equals(target)){
+            return ResponseDTO.error().msg("已经是此状态！不可再重复改变！");
+        }
+        user.setStatus(target);
+        userRepository.saveAndFlush(user);
+
+        return ResponseDTO.success().data(userId);
+    }
+
+    @Override
+    public ResponseDTO blockUser(Integer userId) {
+        return this.changeUserStatus(userId,(short)1);
+    }
+
+    @Override
+    public ResponseDTO unblockUser(Integer userId) {
+        return this.changeUserStatus(userId,(short)0);
     }
 }

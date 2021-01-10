@@ -47,6 +47,10 @@ public class LoginServiceImpl implements LoginService {
         log.info("login===> userName: {} , pwd: {} ,auth success !",userName,password);
 
         user = userOptional.get();
+        if (user.getStatus() == 1){
+            return ResponseDTO.error().msg("该管理员账号已经被停用！请联系管理员解禁！");
+        }
+
 
         //设置token的有效期为三天
         String token = JwtUtil.createWithIntegerClaim(tokenPrivateKey,Duration.ofDays(3),"userId",user.getUserId());
@@ -103,6 +107,9 @@ public class LoginServiceImpl implements LoginService {
         log.info("login===> userName: {} , pwd: {} ,auth success !",userName,password);
 
         user = userOptional.get();
+        if (user.getStatus() == 1){
+            return ResponseDTO.error().msg("该管理员账号已经被停用！请联系超级管理员解禁！");
+        }
 
         //设置token的有效期为三天
         String token = JwtUtil.createWithIntegerClaim(tokenPrivateKey,Duration.ofDays(3),"userId",user.getUserId());
