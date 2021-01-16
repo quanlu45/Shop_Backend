@@ -184,31 +184,65 @@ public class GoodsServiceImpl implements GoodsService {
     public ResponseDTO saveOrUpdateGoods(GoodsBO goodsBO) {
 
         log.debug("saveOrUpdateGoods ==> goodsId ={}", goodsBO.getGoodsId());
-        //验证参数
-        if (StringUtils.isBlank(goodsBO.getGoodsName())
-                || null == goodsBO.getGoodsPrice()
-                || null == goodsBO.getGoodsStock()){
 
-            return ResponseDTO.error(StatusEnum.PARAM_ERROR,"关键参数为空！");
-        }
-        if (null == goodsBO.getStatus()){
-            goodsBO.setStatus(GoodsStatus.WAIT_ON.getCode());
-        }
         try {
-            Goods goods = new Goods();
-            goods.setGoodsSold(0);
-            BeanUtils.copyProperties(goodsBO,goods);
+            Goods goods = null;
+            boolean isUpdate = goodsBO.getGoodsId()!=null;
+            if (isUpdate){
+                Optional<Goods> optional = goodsRepository.findById(goodsBO.getGoodsId());
+                if (!optional.isPresent()){
+                    return ResponseDTO.error(StatusEnum.PARAM_ERROR,"商品id不存在!");
+                }
+                goods = optional.get();
+                goods.setGoodsSold(0);
 
+                if (goodsBO.getGoodsDesc()!=null){
+                    goods.setGoodsDesc(goodsBO.getGoodsDesc());
+                }
 
-            boolean isUpdate = goods.getGoodsId()!=null;
+                if (goodsBO.getGoodsName()!=null){
+                    goods.setGoodsName(goodsBO.getGoodsName());
+                }
+
+                if (goodsBO.getGoodsPrice()!=null){
+                    goods.setGoodsPrice(goodsBO.getGoodsPrice());
+                }
+
+                if (goodsBO.getGoodsStock()!=null){
+                    goods.setGoodsStock(goodsBO.getGoodsStock());
+                }
+
+                if (goodsBO.getGoodsTypeCode()!=null){
+                    goods.setGoodsTypeCode(goodsBO.getGoodsTypeCode());
+                }
+
+            }else {
+                //验证参数
+                if (StringUtils.isBlank(goodsBO.getGoodsName())
+                        || null == goodsBO.getGoodsPrice()
+                        || null == goodsBO.getGoodsStock()){
+
+                    return ResponseDTO.error(StatusEnum.PARAM_ERROR,"关键参数为空！");
+                }
+                goods=new Goods();
+                BeanUtils.copyProperties(goodsBO,goods);
+                goods.setGoodsSold(0);
+                if (null == goodsBO.getStatus()){
+                    goodsBO.setStatus(GoodsStatus.WAIT_ON.getCode());
+                }
+            }
 
             goodsRepository.saveAndFlush(goods);
+
+            Integer goodsId = goods.getGoodsId();
+
             //新增商品图片
             List<String> imgUrls = goodsBO.getGoodsImgUrls();
             if (imgUrls !=null && imgUrls.size()>0){
                List<GoodsImg> goodsImgList = new LinkedList<>();
                imgUrls.forEach(img->{
                    GoodsImg goodsImg = new GoodsImg();
+                   goodsImg.setGoodsId(goodsId);
                    goodsImg.setImgUrl(img);
                    goodsImgList.add(goodsImg);
                });
@@ -219,9 +253,9 @@ public class GoodsServiceImpl implements GoodsService {
                imgRepository.flush();
             }
 
-            return ResponseDTO.success().withKeyValueData("goodsId",goodsBO.getGoodsId());
+            return ResponseDTO.success().withKeyValueData("goodsId",goodsId);
         }catch (Exception e){
-            log.error("saveOrUpdateGoods ==> goods = {},{}", JSON.toJSONString(goodsBO),e.getCause().getMessage());
+            log.error("saveOrUpdateGoods ==> goods = {},{}", JSON.toJSONString(goodsBO),e.toString());
             return ResponseDTO.error().msg(e.getCause().getMessage());
         }
     }

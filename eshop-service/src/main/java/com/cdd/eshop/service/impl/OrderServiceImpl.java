@@ -376,10 +376,10 @@ public class OrderServiceImpl implements OrderService {
         }
         Order order = optionalOrder.get();
 
-        if (!order.getStatus().equals(OrderStatusEnum.WAIT_SHIP.getCode())){
+        if (!order.getStatus().equals(OrderStatusEnum.WAIT_REFUND.getCode())){
             return ResponseDTO.error().msg("订单状态流转失败！订单未在等待退款中！");
         }
-        order.setStatus(OrderStatusEnum.RECEIPTED.getCode());
+        order.setStatus(OrderStatusEnum.REFUNDED.getCode());
         orderRepository.saveAndFlush(order);
         return ResponseDTO.success();
     }

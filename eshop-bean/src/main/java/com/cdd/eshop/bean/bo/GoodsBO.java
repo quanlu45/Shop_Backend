@@ -33,7 +33,7 @@ public class GoodsBO {
     /**
      * 商品类型Id
      */
-    private Integer goodsTypeId;
+    private String goodsTypeCode;
 
     /**
      * 商品库存
